@@ -19,16 +19,32 @@ class Settings(BaseSettings):
                              default='FaOsibHOugjgCdQDAaC6Apnblx9m6aF6FPgHqAA/3WnSKD')
     ALGORITHM: str = config('ALGORITHM', cast=str, default='HS256')
     ACCESS_TOKEN_EXPIRE_MINUTES: int = config('ACCESS_TOKEN_EXPIRE_MINUTES', cast=int, default=30)
+
     PROJECT_NAME: str = config('PROJECT_NAME', cast=str,
                                default='CRUD Project')
     PROJECT_DESCRIPTION: str = config('PROJECT_DESCRIPTION', cast=str,
                                       default='CRUD Project descriptions')
     PROJECT_VERSION: str = config('PROJECT_VERSION', cast=str,
                                   default='0.0.1')
+
+    TIMEZONE: str = config('TIMEZONE', cast=str, default='Europe/Minsk')
+
     SQLALCHEMY_DATABASE_URL_ASYNC: str = config('SQLALCHEMY_DATABASE_URL_ASYNC', cast=str,
                                                 default='sqlite+aiosqlite:///./crud.db')
     SQLALCHEMY_DATABASE_URL_SYNC: str = config('SQLALCHEMY_DATABASE_URL_SYNC', cast=str,
                                                default='sqlite:///./crud.db')
+
+    NBRB_RATES_CODE_URL: str = config(
+        'NBRB_RATES_CODE_URL', cast=str,
+        default='https://www.nbrb.by/api/exrates/rates/$code?parammode=2&ondate=$date')
+    NBRB_RATES_DATE_URL: str = config(
+        'NBRB_RATES_DATE_URL', cast=str,
+        default='https://www.nbrb.by/api/exrates/rates?ondate=$date&periodicity=0')
+
+    CELERY_BROKER_URL: str = config('CELERY_BROKER_URL', cast=str,
+                                    default='redis://172.16.100.227:6379/10')
+    CELERY_BACKEND_URL: str = config('CELERY_BACKEND_URL', cast=str,
+                                     default='redis://172.16.100.227:6379/10')
 
 
 @lru_cache()

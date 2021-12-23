@@ -8,6 +8,13 @@ class ProjectException(Exception):
         self.headers = headers
 
 
+class NotExistException(ProjectException):
+    def __init__(self, message: str = None):
+        if not message:
+            message = 'Object not exist.'
+        super().__init__(status_code=404, detail=message)
+
+
 credentials_exception = HTTPException(
     status_code=status.HTTP_401_UNAUTHORIZED,
     detail='Could not validate credentials',
@@ -33,9 +40,19 @@ email_already_exist = HTTPException(
     detail='User with this e-mail already exist.',
 )
 
+user_or_email_already_exist = HTTPException(
+    status_code=status.HTTP_404_NOT_FOUND,
+    detail='User with this name or e-mail already exist.',
+)
+
 email_not_exist = HTTPException(
     status_code=status.HTTP_404_NOT_FOUND,
     detail='This e-mail not exist.',
+)
+
+user_not_exist = HTTPException(
+    status_code=status.HTTP_404_NOT_FOUND,
+    detail='This user not exist.',
 )
 
 

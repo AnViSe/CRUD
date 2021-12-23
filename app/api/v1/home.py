@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from apps.bank.cruds.currency import import_rate_start_date
+from apps.bank.dao.currency import import_rate_start_date
 from core.config import settings
 
 router = APIRouter(tags=['Home'])

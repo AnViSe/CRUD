@@ -1,10 +1,13 @@
 import asyncio
 import json
 from datetime import datetime, timedelta
+from string import Template
 from typing import List
 
 import httpx
 from dateutil.rrule import DAILY, rrule
+
+from core.config import settings
 
 
 async def get_rate_date_code(date: str, code: str = None):
@@ -29,11 +32,10 @@ async def get_rate_date_code(date: str, code: str = None):
 
 
 async def _get_rate(date: str, code: str = None):
-    main_url = 'https://www.nbrb.by/api/exrates/rates'
     if not code:
-        url = main_url + f'?ondate={date}&periodicity=0'
+        url = Template(settings.NBRB_RATES_DATE_URL).substitute(date=date)
     else:
-        url = main_url + f'/{code}?parammode=2&ondate={date}'
+        url = Template(settings.NBRB_RATES_CODE_URL).substitute(code=code, date=date)
 
     async with httpx.AsyncClient() as client:
         response = await client.get(url)

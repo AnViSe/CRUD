@@ -1,10 +1,11 @@
 from typing import Any, List
 
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, Depends
 
 from apps.auth.model import User
-from apps.bank.cruds import invoice
+from apps.bank.dao import invoice
 from apps.bank.schemas.invoice import InvoiceUpdate, InvoiceView, InvoiceCreate, InvoiceViewFull
+from core.exceptions import NotExistException
 from core.security import current_user_is_banker, get_current_user
 
 router = APIRouter(prefix='/invoices', tags=['Invoices'])
@@ -28,7 +29,7 @@ async def list_my_invoices(user: User = Depends(get_current_user),
 async def get_invoice(obj_id: int, user: User = Depends(get_current_user)) -> Any:
     result = await invoice.get(id=obj_id, user=user)
     if not result:
-        raise HTTPException(status_code=404, detail='Invoice not found!')
+        raise NotExistException()
     return result
 
 
@@ -43,7 +44,7 @@ async def update_invoice(obj_id: int, item: InvoiceUpdate,
                          user: User = Depends(get_current_user)) -> Any:
     obj_db = await invoice.get(id=obj_id, user=user)
     if not obj_db:
-        raise HTTPException(status_code=404, detail='Invoice not found!')
+        raise NotExistException()
     result = await invoice.update_invoice(obj_db=obj_db, obj_in=item, user=user)
     return result
 

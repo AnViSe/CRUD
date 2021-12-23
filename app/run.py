@@ -2,9 +2,12 @@ import time
 
 from celery import Celery
 
+from core.config import settings
+
 app = Celery(__name__)
-app.conf.broker_url = 'redis://172.16.100.227:6379/0'
-app.conf.result_backend = 'redis://172.16.100.227:6379/0'
+app.conf.broker_url = settings.CELERY_BROKER_URL
+app.conf.result_backend = settings.CELERY_BACKEND_URL
+app.conf.timezone = settings.TIMEZONE
 
 
 @app.task(name='create_task')

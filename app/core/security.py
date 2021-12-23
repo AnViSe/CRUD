@@ -5,7 +5,7 @@ from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
 
-from apps.auth.crud import get_user_by_name
+from apps.auth import dao
 from apps.auth.model import User
 from apps.auth.schema import TokenData
 from core.config import settings
@@ -25,7 +25,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
         token_data = TokenData(username=username)
     except JWTError:
         raise credentials_exception
-    user = await get_user_by_name(user_name=token_data.username)
+    user = await dao.get_user_by_name(user_name=token_data.username)
     if user is None:
         raise credentials_exception
     return user

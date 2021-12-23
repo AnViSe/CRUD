@@ -3,9 +3,10 @@ from typing import Any, List
 
 from fastapi import APIRouter, Depends, HTTPException, Path
 
-from apps.bank.cruds import currency
+from apps.bank.dao import currency
 from apps.bank.schemas.currency import CurrencyCreate, CurrencyRateOnDate, CurrencyUpdate, \
     CurrencyView
+from core.exceptions import NotExistException
 from core.security import current_user_is_banker
 
 router = APIRouter(prefix='/currencies', tags=['Currencies'])
@@ -29,7 +30,7 @@ async def get_code_rate(code: str = Path(..., min_length=3, max_length=3),
 async def get_currency(obj_id: int) -> Any:
     result = await currency.get(id=obj_id)
     if not result:
-        raise HTTPException(status_code=404, detail='Currency not found!')
+        raise NotExistException()
     return result
 
 
@@ -45,7 +46,7 @@ async def create_currency(item: CurrencyCreate) -> Any:
 async def update_currency(obj_id: int, item: CurrencyUpdate) -> Any:
     obj_db = await currency.get(id=obj_id)
     if not obj_db:
-        raise HTTPException(status_code=404, detail='Currency not found!')
+        raise NotExistException()
     result = await currency.update_currency(obj_db=obj_db, obj_in=item)
     return result
 
