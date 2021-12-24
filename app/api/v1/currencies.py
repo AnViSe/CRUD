@@ -28,7 +28,7 @@ async def get_code_rate(code: str = Path(..., min_length=3, max_length=3),
 
 @router.get('/{obj_id}', response_model=CurrencyView)
 async def get_currency(obj_id: int) -> Any:
-    result = await currency.get(id=obj_id)
+    result = await currency.currency.get(id=obj_id)
     if not result:
         raise NotExistException()
     return result

@@ -6,9 +6,17 @@ from sqlalchemy import and_, desc, func, select, delete, insert, update
 from apps.bank.models.currency import Currency
 from apps.bank.schemas.currency import CurrencyCreate, CurrencyRateOnDate, CurrencyUpdate
 from apps.bank.utils.nbrb_rates import get_rate_date_code
+from db.dao import DaoBase
 from db.session import SessionManager
 
 db = SessionManager()
+
+
+class DaoCurrency(DaoBase[Currency]):
+    pass
+
+
+currency = DaoCurrency(Currency)
 
 
 async def get(id: Any) -> Optional[Currency]:
@@ -79,5 +87,3 @@ async def import_rate_start_date(date_start: str = None):
     async with db.obtain_session() as sess:
         sess.add_all(curr_items)
     return {'Loaded rates starts after date': start_date}
-
-
